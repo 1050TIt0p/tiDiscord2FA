@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.matveylegenda.tidiscord2fa.commands.Discord2FA;
 import ru.matveylegenda.tidiscord2fa.listeners.*;
+import ru.matveylegenda.tidiscord2fa.utils.Metrics;
 
 public final class TiDiscord2FA extends JavaPlugin {
     private static TiDiscord2FA instance;
@@ -54,6 +55,9 @@ public final class TiDiscord2FA extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockMove(), this);
         getServer().getPluginManager().registerEvents(new PlayerJoin(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
+
+        int pluginId = 22007;
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     public static TiDiscord2FA getInstance() {
