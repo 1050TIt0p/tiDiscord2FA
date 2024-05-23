@@ -1,0 +1,13 @@
+name: tiDiscord2FA
+version: '${project.version}'
+authors:
+  - 1050TI_top
+main: ru.matveylegenda.tidiscord2fa.TiDiscord2FA
+api-version: '1.16'
+libraries:
+  - net.dv8tion:JDA:5.0.0-beta.22
+commands:
+  tidiscord2fa:
+    aliases:
+      - discord2fa
+      - d2fa
