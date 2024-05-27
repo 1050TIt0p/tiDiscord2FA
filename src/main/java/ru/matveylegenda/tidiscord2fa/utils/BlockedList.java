@@ -2,10 +2,15 @@ package ru.matveylegenda.tidiscord2fa.utils;
 
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BlockedList {
-    private static ArrayList<Player> blocked = new ArrayList<>();
+    private static Set<Player> blocked = new HashSet<>();
+
+    public boolean isEmpty() {
+        return blocked.isEmpty();
+    }
 
     public boolean isBlocked(Player player) {
         return blocked.contains(player);

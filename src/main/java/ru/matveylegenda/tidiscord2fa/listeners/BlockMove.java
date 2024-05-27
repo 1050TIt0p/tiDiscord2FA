@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import ru.matveylegenda.tidiscord2fa.TiDiscord2FA;
 import ru.matveylegenda.tidiscord2fa.utils.BlockedList;
 import ru.matveylegenda.tidiscord2fa.utils.ColorParser;
+import ru.matveylegenda.tidiscord2fa.utils.Config;
 
 public class BlockMove implements Listener {
     private TiDiscord2FA plugin = TiDiscord2FA.getInstance();
@@ -14,10 +15,15 @@ public class BlockMove implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+        if(blockedUtil.isEmpty()) {
+            return;
+        }
+
         Player player = event.getPlayer();
+        Config config = plugin.config;
 
         if(blockedUtil.isBlocked(player)) {
-            for (String message : plugin.getConfig().getStringList("messages.minecraft.join")) {
+            for (String message : config.messages.minecraft.join) {
                 player.sendMessage(ColorParser.hex(message));
             }
 

@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import ru.matveylegenda.tidiscord2fa.TiDiscord2FA;
 import ru.matveylegenda.tidiscord2fa.utils.BlockedList;
+import ru.matveylegenda.tidiscord2fa.utils.Config;
 
 import java.util.List;
 
@@ -15,12 +16,17 @@ public class BlockCommand implements Listener {
 
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if(blockedUtil.isEmpty()) {
+            return;
+        }
+
         Player player = event.getPlayer();
+        Config config = plugin.config;
 
         if(blockedUtil.isBlocked(player)) {
             String[] commandArgs = event.getMessage().split(" ");
             String command = commandArgs[0].toLowerCase();
-            List<String> allowedCommands = plugin.getConfig().getStringList("settings.allowedCommands");
+            List<String> allowedCommands = config.settings.allowedCommands;
             if(!allowedCommands.contains(command)) {
                 event.setCancelled(true);
             }
