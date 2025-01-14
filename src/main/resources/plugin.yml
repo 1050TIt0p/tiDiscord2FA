@@ -1,0 +1,5 @@
+name: tiDiscord2FA
+version: '${version}'
+main: ru.matveylegenda.tidiscord2fa.TiDiscord2FA
+api-version: '1.16'
+authors: [1050TI_top]
