@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.internal.utils.JDALogger;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -34,6 +35,7 @@ public class Discord {
 
     public void enableBot() {
         try {
+            JDALogger.setFallbackLoggerEnabled(false);
             jda = JDABuilder.createDefault(MainConfig.instance.discord.token)
                     .enableIntents(
                             GatewayIntent.DIRECT_MESSAGES,

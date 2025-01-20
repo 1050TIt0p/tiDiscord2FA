@@ -33,34 +33,6 @@ public class MainConfig extends YamlSerializable {
                 @CommentValue(" После изменения параметра перезагрузите сервер"),
         })
         public String linkType = "CODE";
-
-        public OAuth2 oauth2 = new OAuth2();
-
-        @NewLine
-        public static class OAuth2 {
-            @Comment({
-                    @CommentValue(" Порт выделяемый для веб сервера")
-            })
-            public int port = 25569;
-
-            @NewLine
-            public String clientId;
-            public String clientSecret;
-
-            @Comment({
-                    @CommentValue(" Ссылка на которую будет перекидывать пользователя после авторизации в Discord"),
-                    @CommentValue(" Эту же ссылку нужно указать в поле Redirects во вкладке OAuth2 на портале разработчиков Discord"),
-                    @CommentValue(" КРОМЕ АЙПИ И ПОРТА НИЧЕГО НЕ МЕНЯТЬ!!!")
-            })
-            public String redirectUri = "http://localhost:25569/auth/discord/callback";
-
-            @Comment({
-                    @CommentValue(" Ссылка которая будет использоваться для привязки"),
-                    @CommentValue(" Вместо <client_id> и <redirect_uri> подставьте client id вашего бота и redirect uri из строки выше"),
-                    @CommentValue(" или сгенерируйте ссылку во вкладке OAuth2 на портале разработчиков Discord с разрешением identify")
-            })
-            public String oauthUri = "https://discord.com/oauth2/authorize?client_id=<client_id>&response_type=code&redirect_uri=<redirect_uri>&scope=identify";
-        }
     }
 
     @NewLine

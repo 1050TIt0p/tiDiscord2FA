@@ -106,22 +106,11 @@ public class MessagesConfig extends YamlSerializable {
 
         @NewLine
         @Comment({
-                @CommentValue(" Сообщение отправляемое при привязке Discord при режиме CODE")
+                @CommentValue(" Сообщение отправляемое при привязке Discord")
         })
-        public List<String> linkCode = List.of(
+        public List<String> link = List.of(
                 "",
                 "{prefix} &fКод - {code}. Отправьте его боту example#1111",
-                ""
-        );
-
-        @NewLine
-        @Comment({
-                @CommentValue(" Сообщение отправляемое при привязке Discord при режиме OAUTH2")
-        })
-        public List<String> linkOauth = List.of(
-                "",
-                "{prefix} &fПерейдите по ссылке, чтобы привязать аккаунт",
-                "{link}",
                 ""
         );
 

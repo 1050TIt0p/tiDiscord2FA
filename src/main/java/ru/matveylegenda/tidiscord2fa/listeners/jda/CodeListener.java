@@ -18,13 +18,12 @@ public class CodeListener extends ListenerAdapter {
             return;
         }
 
-        Database database = TiDiscord2FA.getDatabase();
-
         User user = event.getAuthor();
         Message message = event.getMessage();
         String messageContent = event.getMessage().getContentRaw();
 
         if (CodeMap.instance.containsValue(messageContent)) {
+            Database database = TiDiscord2FA.getDatabase();
             int accountsCount = database.getAccountCountByDiscordId(user.getId());
 
             if (accountsCount >= MainConfig.instance.maxLinkAccounts) {

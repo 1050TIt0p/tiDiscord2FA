@@ -22,7 +22,7 @@ import java.nio.file.Path;
 
 public final class TiDiscord2FA extends JavaPlugin {
     private final ConsoleCommandSender consoleSender = getServer().getConsoleSender();
-    public static Database database;
+    private static Database database;
 
     @Override
     public void onEnable() {
