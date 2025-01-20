@@ -43,6 +43,10 @@ public class MainConfig extends YamlSerializable {
             })
             public int port = 25569;
 
+            @NewLine
+            public String clientId;
+            public String clientSecret;
+
             @Comment({
                     @CommentValue(" Ссылка на которую будет перекидывать пользователя после авторизации в Discord"),
                     @CommentValue(" Эту же ссылку нужно указать в поле Redirects во вкладке OAuth2 на портале разработчиков Discord"),

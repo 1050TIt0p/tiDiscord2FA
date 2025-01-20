@@ -1,7 +1,5 @@
 package ru.matveylegenda.tidiscord2fa.utils;
 
-import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
 

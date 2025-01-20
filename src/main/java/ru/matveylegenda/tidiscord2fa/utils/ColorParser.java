@@ -2,10 +2,8 @@ package ru.matveylegenda.tidiscord2fa.utils;
 
 import net.md_5.bungee.api.ChatColor;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static net.md_5.bungee.api.ChatColor.COLOR_CHAR;
 

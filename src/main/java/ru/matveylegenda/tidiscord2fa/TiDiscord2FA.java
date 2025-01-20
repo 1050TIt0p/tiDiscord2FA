@@ -15,14 +15,14 @@ import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.AuthMeLoginListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.NLoginLoginListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.OpeNLoginLoginListener;
 import ru.matveylegenda.tidiscord2fa.socials.Discord;
+import ru.matveylegenda.tidiscord2fa.tasks.MessageTask;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.concurrent.CompletableFuture;
 
 public final class TiDiscord2FA extends JavaPlugin {
     private final ConsoleCommandSender consoleSender = getServer().getConsoleSender();
-    public Database database;
+    public static Database database;
 
     @Override
     public void onEnable() {
@@ -40,13 +40,11 @@ public final class TiDiscord2FA extends JavaPlugin {
 
         new Discord(this).enableBot();
 
-        CompletableFuture.runAsync(() -> {
-            try {
-                database = new SQLiteDatabase(new File(getDataFolder(), "users.db"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            database = new SQLiteDatabase(new File(getDataFolder(), "users.db"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         getServer().getCommandMap().register(MainConfig.instance.command, new Discord2FACommand(this, MainConfig.instance.command));
 
@@ -66,7 +64,13 @@ public final class TiDiscord2FA extends JavaPlugin {
             pluginManager.registerEvents(new OpeNLoginLoginListener(this), this);
         }
 
+        new MessageTask(this);
+
         new Metrics(this, 22007);
+    }
+
+    public static Database getDatabase() {
+        return database;
     }
 
     @Override

@@ -26,12 +26,10 @@ import static ru.matveylegenda.tidiscord2fa.utils.ColorParser.colorize;
 
 public class Discord {
     private TiDiscord2FA plugin;
-    private Database database;
-    private JDA jda;
+    private static JDA jda;
 
     public Discord(TiDiscord2FA plugin) {
         this.plugin = plugin;
-        this.database = plugin.database;
     }
 
     public void enableBot() {
@@ -44,7 +42,7 @@ public class Discord {
 
                     .addEventListeners(
                             new AllowJoinListener(),
-                            new CodeListener(plugin)
+                            new CodeListener()
                     )
 
                     .build();
@@ -55,6 +53,7 @@ public class Discord {
 
     public void checkPlayer(Player player) {
         CompletableFuture.runAsync(() -> {
+            Database database = TiDiscord2FA.getDatabase();
             String discordId = database.getDiscordIdByPlayerName(player.getName());
 
             if (discordId != null) {
@@ -147,7 +146,7 @@ public class Discord {
         });
     }
 
-    public JDA getJDA() {
+    public static JDA getJDA() {
         return jda;
     }
 }

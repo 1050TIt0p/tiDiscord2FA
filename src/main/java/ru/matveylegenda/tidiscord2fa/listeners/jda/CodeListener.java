@@ -11,19 +11,14 @@ import ru.matveylegenda.tidiscord2fa.database.Database;
 import ru.matveylegenda.tidiscord2fa.utils.CodeMap;
 
 public class CodeListener extends ListenerAdapter {
-    private TiDiscord2FA plugin;
-    private Database database;
-
-    public CodeListener(TiDiscord2FA plugin) {
-        this.plugin = plugin;
-        this.database = plugin.database;
-    }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.isFromGuild()) {
             return;
         }
+
+        Database database = TiDiscord2FA.getDatabase();
 
         User user = event.getAuthor();
         Message message = event.getMessage();

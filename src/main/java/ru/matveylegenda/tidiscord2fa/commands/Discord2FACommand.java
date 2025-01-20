@@ -12,6 +12,7 @@ import ru.matveylegenda.tidiscord2fa.utils.CodeMap;
 
 import java.nio.file.Path;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static ru.matveylegenda.tidiscord2fa.utils.ColorParser.colorize;
@@ -70,15 +71,21 @@ public class Discord2FACommand extends BukkitCommand {
                         for (String message : MessagesConfig.instance.minecraft.linkOauth) {
                             player.sendMessage(
                                     colorize(
-                                            message.replace("{link}", MainConfig.instance.discord.oauth2.oauthUri)
+                                            message.replace(
+                                                    "{link}",
+                                                    MainConfig.instance.discord.oauth2.oauthUri + "&state=" + UUID.randomUUID()
+                                            )
                                     )
                             );
                         }
                     } else {
+                        String code = generateCode(player);
                         for (String message : MessagesConfig.instance.minecraft.linkCode) {
                             player.sendMessage(
                                     colorize(
-                                            message.replace("{code}", generateCode(player))
+                                            message
+                                                    .replace("{code}", code)
+                                                    .replace("{prefix}", MessagesConfig.instance.minecraft.prefix)
                                     )
                             );
                         }
