@@ -1,5 +1,6 @@
 package ru.matveylegenda.tidiscord2fa;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +15,6 @@ import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.AuthMeLoginListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.NLoginLoginListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.OpeNLoginLoginListener;
 import ru.matveylegenda.tidiscord2fa.socials.Discord;
-import ru.matveylegenda.tidiscord2fa.utils.Metrics;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -53,9 +53,18 @@ public final class TiDiscord2FA extends JavaPlugin {
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new JoinListener(this), this);
         pluginManager.registerEvents(new MainListener(), this);
-        pluginManager.registerEvents(new AuthMeLoginListener(this), this);
-        pluginManager.registerEvents(new NLoginLoginListener(this), this);
-        pluginManager.registerEvents(new OpeNLoginLoginListener(this), this);
+
+        if (pluginManager.getPlugin("AuthMeReloaded") != null) {
+            pluginManager.registerEvents(new AuthMeLoginListener(this), this);
+        }
+
+        if (pluginManager.getPlugin("nLogin") != null) {
+            pluginManager.registerEvents(new NLoginLoginListener(this), this);
+        }
+
+        if (pluginManager.getPlugin("OpeNLogin") != null) {
+            pluginManager.registerEvents(new OpeNLoginLoginListener(this), this);
+        }
 
         new Metrics(this, 22007);
     }

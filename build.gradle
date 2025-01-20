@@ -31,12 +31,23 @@ repositories {
 
 dependencies {
     compileOnly "com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT"
-    implementation "net.elytrium:serializer:1.1.1"
-    implementation "net.dv8tion:JDA:5.2.2"
+    implementation "org.bstats:bstats-bukkit:3.0.2"
+    compileOnly "net.elytrium:serializer:1.1.1"
+    compileOnly "net.dv8tion:JDA:5.2.2"
     compileOnly "com.github.Overwrite987:UltimateServerProtector:33.3"
     compileOnly "com.github.AuthMe:AuthMeReloaded:5.6.0-beta2"
     compileOnly "com.nickuc.login:api:10.4"
     compileOnly "com.nickuc.openlogin:openlogin-universal:1.3"
+
+    compileOnly "io.ktor:ktor-server-core:3.0.1"
+    compileOnly "io.ktor:ktor-server-netty:3.0.1"
+    compileOnly "io.ktor:ktor-client-cio:3.0.3"
+
+    compileOnly "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
+}
+
+tasks.shadowJar {
+    relocate("org.bstats", "ru.matveylegenda.tidiscord2fa.utils.bstats")
 }
 
 sourceSets {
