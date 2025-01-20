@@ -2,7 +2,7 @@ name: tiDiscord2FA
 version: '${version}'
 main: ru.matveylegenda.tidiscord2fa.TiDiscord2FA
 api-version: '1.16'
-authors: [1050TI_top]
+authors: [1050TI_macac]
 libraries:
   - net.elytrium:serializer:1.1.1
   - net.dv8tion:JDA:5.2.2
