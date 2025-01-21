@@ -44,7 +44,7 @@ public class MessagesConfig extends YamlSerializable {
 
         @NewLine
         @Comment({
-                @CommentValue(" Сообщение отправляемое если игрок не найден на сервере")
+                @CommentValue(" Сообщение отправляемое если игрок не найден")
         })
         public String playerNotFound = "Аккаунт не найден";
 
@@ -52,7 +52,7 @@ public class MessagesConfig extends YamlSerializable {
         @Comment({
                 @CommentValue(" Сообщение отправляемое при привязке аккаунта")
         })
-        public String accountLinked = "Соц. сеть успешно привязана к аккаунту {player}";
+        public String accountLinked = "Discord успешно привязана к аккаунту {player}";
 
         @NewLine
         @Comment({
