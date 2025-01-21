@@ -59,6 +59,24 @@ public class MessagesConfig extends YamlSerializable {
                 @CommentValue(" Сообщение отправляемое при отвязке аккаунта")
         })
         public String accountUnlinked = "Discord успешно отвязан от аккаунта {player}";
+
+        @NewLine
+        @Comment({
+                @CommentValue(" Сообщение отправляемое при попытке привязать аккаунт при достижении лимита")
+        })
+        public String maxLinkAccounts = "Вы достигли лимита по привязанным аккаунтам";
+
+        @NewLine
+        @Comment({
+                @CommentValue(" Сообщение отправляемое при вводе команды для просмотра аккаунтов если нет привязанных аккаунтов")
+        })
+        public String noLinkedAccounts = "У вас нет привязанных аккаунтов";
+
+        @NewLine
+        @Comment({
+                @CommentValue(" Сообщение отправляемое при вводе команды для просмотра аккаунтов")
+        })
+        public String accountList = "Привязанные аккаунты:\n```{accounts}\n```";
     }
 
     public Minecraft minecraft = new Minecraft();

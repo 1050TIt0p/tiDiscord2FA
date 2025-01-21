@@ -52,7 +52,7 @@ public final class TiDiscord2FA extends JavaPlugin {
         pluginManager.registerEvents(new JoinListener(this), this);
         pluginManager.registerEvents(new MainListener(), this);
 
-        if (pluginManager.getPlugin("AuthMeReloaded") != null) {
+        if (pluginManager.getPlugin("AuthMe") != null) {
             pluginManager.registerEvents(new AuthMeLoginListener(this), this);
         }
 

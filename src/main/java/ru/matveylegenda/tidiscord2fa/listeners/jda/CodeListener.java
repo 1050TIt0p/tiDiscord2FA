@@ -27,7 +27,7 @@ public class CodeListener extends ListenerAdapter {
             int accountsCount = database.getAccountCountByDiscordId(user.getId());
 
             if (accountsCount >= MainConfig.instance.maxLinkAccounts) {
-                message.reply("Вы достигли лимита по привязанным аккаунтам")
+                message.reply(MessagesConfig.instance.discord.maxLinkAccounts)
                         .queue();
 
                 return;

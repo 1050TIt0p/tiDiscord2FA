@@ -3,6 +3,7 @@ package ru.matveylegenda.tidiscord2fa.listeners.jda;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import ru.matveylegenda.tidiscord2fa.configs.MessagesConfig;
 import ru.matveylegenda.tidiscord2fa.utils.BlockedList;
@@ -43,6 +44,12 @@ public class AllowJoinListener extends ListenerAdapter {
             }
 
             BlockedList.instance.remove(player);
+
+            GameMode gameMode = player.getGameMode();
+            if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
+                player.setFlying(false);
+                player.setAllowFlight(false);
+            }
 
             for (String message : MessagesConfig.instance.minecraft.allowJoin) {
                 player.sendMessage(

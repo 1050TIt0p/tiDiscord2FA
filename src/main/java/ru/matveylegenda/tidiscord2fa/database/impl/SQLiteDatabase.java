@@ -4,6 +4,8 @@ import ru.matveylegenda.tidiscord2fa.database.Database;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLiteDatabase implements Database {
     private final String url;
@@ -72,6 +74,24 @@ public class SQLiteDatabase implements Database {
         }
 
         return 0;
+    }
+
+    @Override
+    public List<String> getAccountsByDiscordId(String discordId) {
+        List<String> playerNames = new ArrayList<>();
+
+        try (Connection connection = connect();
+             PreparedStatement statement = connection.prepareStatement("SELECT `player_name` FROM `discord_users` WHERE `discord_id` = ?;")) {
+            statement.setString(1, discordId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                playerNames.add(resultSet.getString("player_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return playerNames;
     }
 
     @Override

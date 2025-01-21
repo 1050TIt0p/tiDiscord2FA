@@ -15,15 +15,27 @@ public class MainConfig extends YamlSerializable {
     })
     public String command = "2fa";
 
+    @NewLine
     @Comment({
             @CommentValue(" Команда (в Discord) для отвязки (после изменения требуется перезагрузить сервер)")
     })
     public String unlinkCommand = "отвязать";
 
     @Comment({
-            @CommentValue(" Команда (в Discord) для отвязки (после изменения требуется перезагрузить сервер)")
+            @CommentValue(" Описание команды (в Discord) для отвязки (после изменения требуется перезагрузить сервер)")
     })
     public String unlinkDescription = "Отвязать аккаунт";
+
+    @NewLine
+    @Comment({
+            @CommentValue(" Команда (в Discord) для просмотра привязанных аккаунтов (после изменения требуется перезагрузить сервер)")
+    })
+    public String accountsCommand = "аккаунты";
+
+    @Comment({
+            @CommentValue(" Описание команды (в Discord) для просмотра привязанных аккаунтов (после изменения требуется перезагрузить сервер)")
+    })
+    public String accountsDescription = "Показать список привязанных аккаунтов";
 
     public Discord discord = new Discord();
 
@@ -33,16 +45,6 @@ public class MainConfig extends YamlSerializable {
                 @CommentValue(" Токен дискорд бота")
         })
         public String token = "TOKEN";
-
-        @NewLine
-        @Comment({
-                @CommentValue(" Тип верификации"),
-                @CommentValue(" CODE - игроку в чате отправляется код который он должен отправить боту"),
-                @CommentValue(" OAUTH2 - игроку в чате отправляется ссылка по которой он привязывает аккаунт"),
-                @CommentValue(" "),
-                @CommentValue(" После изменения параметра перезагрузите сервер"),
-        })
-        public String linkType = "CODE";
     }
 
     @NewLine

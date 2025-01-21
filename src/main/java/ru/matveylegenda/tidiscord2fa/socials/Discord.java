@@ -19,6 +19,7 @@ import ru.matveylegenda.tidiscord2fa.TiDiscord2FA;
 import ru.matveylegenda.tidiscord2fa.configs.MainConfig;
 import ru.matveylegenda.tidiscord2fa.configs.MessagesConfig;
 import ru.matveylegenda.tidiscord2fa.database.Database;
+import ru.matveylegenda.tidiscord2fa.listeners.jda.AccountListListener;
 import ru.matveylegenda.tidiscord2fa.listeners.jda.AllowJoinListener;
 import ru.matveylegenda.tidiscord2fa.listeners.jda.CodeListener;
 import ru.matveylegenda.tidiscord2fa.listeners.jda.UnlinkListener;
@@ -48,7 +49,8 @@ public class Discord {
                     .addEventListeners(
                             new AllowJoinListener(),
                             new CodeListener(),
-                            new UnlinkListener()
+                            new UnlinkListener(),
+                            new AccountListListener()
                     )
 
                     .build();
@@ -56,7 +58,9 @@ public class Discord {
             jda.updateCommands()
                     .addCommands(
                             Commands.slash(MainConfig.instance.unlinkCommand, MainConfig.instance.unlinkDescription)
-                                    .addOption(OptionType.STRING, "player", "player", true)
+                                    .addOption(OptionType.STRING, "player", "player", true),
+
+                            Commands.slash(MainConfig.instance.accountsCommand, MainConfig.instance.accountsDescription)
                     ).queue();
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,6 +74,9 @@ public class Discord {
 
             if (discordId != null) {
                 BlockedList.instance.add(player);
+
+                player.setAllowFlight(true);
+                player.setFlying(true);
 
                 for (String message : MessagesConfig.instance.minecraft.join) {
                     player.sendMessage(

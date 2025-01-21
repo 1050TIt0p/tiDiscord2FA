@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.0.20"
+    id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
@@ -42,13 +42,8 @@ dependencies {
 
 tasks.shadowJar {
     relocate("org.bstats", "ru.matveylegenda.tidiscord2fa.utils.bstats")
-}
 
-sourceSets {
-    main {
-        java.srcDirs("src/main/java")
-        kotlin.srcDirs("src/main/java")
-    }
+    minimize()
 }
 
 def targetJavaVersion = 16
@@ -59,10 +54,6 @@ java {
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
-}
-
-kotlin {
-    jvmToolchain(targetJavaVersion)
 }
 
 tasks.withType(JavaCompile).configureEach {
