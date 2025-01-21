@@ -28,6 +28,7 @@ public class AllowJoinListener extends ListenerAdapter {
 
             if (player == null) {
                 event.editMessage(MessagesConfig.instance.discord.playerNotFound)
+                        .setComponents()
                         .queue();
 
                 return;
@@ -35,6 +36,7 @@ public class AllowJoinListener extends ListenerAdapter {
 
             if (!BlockedList.instance.contains(player)) {
                 event.editMessage(MessagesConfig.instance.discord.verifyNotRequired)
+                        .setComponents()
                         .queue();
 
                 return;
@@ -50,7 +52,8 @@ public class AllowJoinListener extends ListenerAdapter {
                 );
             }
 
-            event.reply(MessagesConfig.instance.discord.allowJoin)
+            event.editMessage(MessagesConfig.instance.discord.allowJoin)
+                    .setComponents()
                     .queue();
         }
     }
