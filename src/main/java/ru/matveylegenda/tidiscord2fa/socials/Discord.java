@@ -3,6 +3,8 @@ package ru.matveylegenda.tidiscord2fa.socials;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -19,6 +21,7 @@ import ru.matveylegenda.tidiscord2fa.configs.MessagesConfig;
 import ru.matveylegenda.tidiscord2fa.database.Database;
 import ru.matveylegenda.tidiscord2fa.listeners.jda.AllowJoinListener;
 import ru.matveylegenda.tidiscord2fa.listeners.jda.CodeListener;
+import ru.matveylegenda.tidiscord2fa.listeners.jda.UnlinkListener;
 import ru.matveylegenda.tidiscord2fa.utils.BlockedList;
 
 import java.util.concurrent.CompletableFuture;
@@ -44,10 +47,17 @@ public class Discord {
 
                     .addEventListeners(
                             new AllowJoinListener(),
-                            new CodeListener()
+                            new CodeListener(),
+                            new UnlinkListener()
                     )
 
                     .build();
+
+            jda.updateCommands()
+                    .addCommands(
+                            Commands.slash(MainConfig.instance.unlinkCommand, MainConfig.instance.unlinkDescription)
+                                    .addOption(OptionType.STRING, "player", "player", true)
+                    ).queue();
         } catch (Exception e) {
             e.printStackTrace();
         }

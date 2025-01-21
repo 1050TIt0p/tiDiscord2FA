@@ -11,9 +11,19 @@ public class MainConfig extends YamlSerializable {
     public static MainConfig instance = new MainConfig();
 
     @Comment({
-            @CommentValue(" Команда для привязки (после изменения требуется перезагрузить сервер)")
+            @CommentValue(" Команда (на сервере) для привязки (после изменения требуется перезагрузить сервер)")
     })
     public String command = "2fa";
+
+    @Comment({
+            @CommentValue(" Команда (в Discord) для отвязки (после изменения требуется перезагрузить сервер)")
+    })
+    public String unlinkCommand = "отвязать";
+
+    @Comment({
+            @CommentValue(" Команда (в Discord) для отвязки (после изменения требуется перезагрузить сервер)")
+    })
+    public String unlinkDescription = "Отвязать аккаунт";
 
     public Discord discord = new Discord();
 

@@ -53,6 +53,12 @@ public class MessagesConfig extends YamlSerializable {
                 @CommentValue(" Сообщение отправляемое при привязке аккаунта")
         })
         public String accountLinked = "Соц. сеть успешно привязана к аккаунту {player}";
+
+        @NewLine
+        @Comment({
+                @CommentValue(" Сообщение отправляемое при отвязке аккаунта")
+        })
+        public String accountUnlinked = "Discord успешно отвязан от аккаунта {player}";
     }
 
     public Minecraft minecraft = new Minecraft();
