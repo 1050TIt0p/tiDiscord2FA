@@ -47,6 +47,36 @@ public class MainConfig extends YamlSerializable {
         public String token = "TOKEN";
     }
 
+    public Database database = new Database();
+
+    @NewLine(amount = 1)
+    @Comment({
+            @CommentValue(" Настройки базы данных")
+    })
+    public static class Database {
+        @Comment({
+                @CommentValue(" Тип используемой базы данных"),
+                @CommentValue(" Доступные варианты:"),
+                @CommentValue(" SQLite"),
+                @CommentValue(" MySQL")
+        })
+        public String type = "SQLite";
+
+        public MySQL mysql = new MySQL();
+
+        @NewLine(amount = 1)
+        @Comment({
+                @CommentValue( "Настройки MySQL")
+        })
+        public static class MySQL {
+            public String host;
+            public int port;
+            public String database;
+            public String user;
+            public String password;
+        }
+    }
+
     @NewLine
     @Comment({
             @CommentValue(" Максимальное количество привязанных аккаунтов к Discord")

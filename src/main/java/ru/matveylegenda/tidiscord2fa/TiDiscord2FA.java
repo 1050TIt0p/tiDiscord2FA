@@ -8,6 +8,7 @@ import ru.matveylegenda.tidiscord2fa.commands.Discord2FACommand;
 import ru.matveylegenda.tidiscord2fa.configs.MainConfig;
 import ru.matveylegenda.tidiscord2fa.configs.MessagesConfig;
 import ru.matveylegenda.tidiscord2fa.database.Database;
+import ru.matveylegenda.tidiscord2fa.database.impl.MySQLDatabase;
 import ru.matveylegenda.tidiscord2fa.database.impl.SQLiteDatabase;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.JoinListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.MainListener;
@@ -41,7 +42,17 @@ public final class TiDiscord2FA extends JavaPlugin {
         new Discord(this).enableBot();
 
         try {
-            database = new SQLiteDatabase(new File(getDataFolder(), "users.db"));
+            if (MainConfig.instance.database.type.equalsIgnoreCase("MySQL")) {
+                database = new MySQLDatabase(
+                        MainConfig.instance.database.mysql.host,
+                        MainConfig.instance.database.mysql.port,
+                        MainConfig.instance.database.mysql.database,
+                        MainConfig.instance.database.mysql.user,
+                        MainConfig.instance.database.mysql.password
+                );
+            } else {
+                database = new SQLiteDatabase(new File(getDataFolder(), "users.db"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
