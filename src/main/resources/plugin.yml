@@ -6,3 +6,4 @@ authors: [1050TI_top]
 libraries:
   - net.elytrium:serializer:1.1.1
   - net.dv8tion:JDA:5.2.2
+  - com.zaxxer:HikariCP:6.2.1

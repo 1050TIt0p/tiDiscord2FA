@@ -106,6 +106,6 @@ public class MySQLDatabase implements Database {
 
     @Override
     public void close() {
-
+        src.close();
     }
 }
