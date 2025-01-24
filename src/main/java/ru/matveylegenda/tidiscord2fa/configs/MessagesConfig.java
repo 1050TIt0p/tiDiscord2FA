@@ -8,7 +8,6 @@ import net.elytrium.serializer.language.object.YamlSerializable;
 import java.util.List;
 
 public class MessagesConfig extends YamlSerializable {
-    public static MessagesConfig instance = new MessagesConfig();
 
     public Discord discord = new Discord();
 

@@ -11,6 +11,17 @@ import ru.matveylegenda.tidiscord2fa.database.Database;
 import ru.matveylegenda.tidiscord2fa.utils.CodeMap;
 
 public class CodeListener extends ListenerAdapter {
+    private final MainConfig mainConfig;
+    private final MessagesConfig messagesConfig;
+    private final CodeMap codeMap;
+    private final Database database;
+
+    public CodeListener(TiDiscord2FA plugin) {
+        this.mainConfig = plugin.mainConfig;
+        this.messagesConfig = plugin.messagesConfig;
+        this.codeMap = plugin.codeMap;
+        this.database = plugin.database;
+    }
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
@@ -22,23 +33,22 @@ public class CodeListener extends ListenerAdapter {
         Message message = event.getMessage();
         String messageContent = event.getMessage().getContentRaw();
 
-        if (CodeMap.instance.containsValue(messageContent)) {
-            Database database = TiDiscord2FA.getDatabase();
+        if (codeMap.containsValue(messageContent)) {
             int accountsCount = database.getAccountCountByDiscordId(user.getId());
 
-            if (accountsCount >= MainConfig.instance.maxLinkAccounts) {
-                message.reply(MessagesConfig.instance.discord.maxLinkAccounts)
+            if (accountsCount >= mainConfig.maxLinkAccounts) {
+                message.reply(messagesConfig.discord.maxLinkAccounts)
                         .queue();
 
                 return;
             }
 
-            String playerName = CodeMap.instance.getKey(messageContent);
+            String playerName = codeMap.getKey(messageContent);
 
             database.addUser(playerName, user.getId());
-            CodeMap.instance.remove(playerName);
+            codeMap.remove(playerName);
 
-            message.reply(MessagesConfig.instance.discord.accountLinked.replace("{player}", playerName))
+            message.reply(messagesConfig.discord.accountLinked.replace("{player}", playerName))
                     .queue();
         }
     }

@@ -30,142 +30,149 @@ import java.util.concurrent.CompletableFuture;
 import static ru.matveylegenda.tidiscord2fa.utils.ColorParser.colorize;
 
 public class Discord {
-    private TiDiscord2FA plugin;
-    private static JDA jda;
+    private final TiDiscord2FA plugin;
+    private final MainConfig mainConfig;
+    private final MessagesConfig messagesConfig;
+    private final BlockedList blockedList;
+    private final Database database;
+    private JDA jda;
 
     public Discord(TiDiscord2FA plugin) {
         this.plugin = plugin;
+        this.mainConfig = plugin.mainConfig;
+        this.messagesConfig = plugin.messagesConfig;
+        this.blockedList = plugin.blockedList;
+        this.database = plugin.database;
     }
 
-    public void enableBot() {
-        try {
-            JDALogger.setFallbackLoggerEnabled(false);
-            jda = JDABuilder.createDefault(MainConfig.instance.discord.token)
-                    .enableIntents(
-                            GatewayIntent.DIRECT_MESSAGES,
-                            GatewayIntent.MESSAGE_CONTENT
-                    )
+    public void enableBot() throws Exception {
+        JDALogger.setFallbackLoggerEnabled(false);
+        jda = JDABuilder.createDefault(mainConfig.discord.token)
+                .enableIntents(
+                        GatewayIntent.DIRECT_MESSAGES,
+                        GatewayIntent.MESSAGE_CONTENT
+                )
+                .addEventListeners(
+                        new AllowJoinListener(plugin),
+                        new CodeListener(plugin),
+                        new UnlinkListener(plugin),
+                        new AccountListListener(plugin)
+                )
+                .build();
 
-                    .addEventListeners(
-                            new AllowJoinListener(),
-                            new CodeListener(),
-                            new UnlinkListener(),
-                            new AccountListListener()
-                    )
-
-                    .build();
-
-            jda.updateCommands()
-                    .addCommands(
-                            Commands.slash(MainConfig.instance.unlinkCommand, MainConfig.instance.unlinkDescription)
-                                    .addOption(OptionType.STRING, "player", "player", true),
-
-                            Commands.slash(MainConfig.instance.accountsCommand, MainConfig.instance.accountsDescription)
-                    ).queue();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        setupCommands();
     }
 
     public void checkPlayer(Player player) {
         CompletableFuture.runAsync(() -> {
-            Database database = TiDiscord2FA.getDatabase();
             String discordId = database.getDiscordIdByPlayerName(player.getName());
 
             if (discordId != null) {
-                BlockedList.instance.add(player);
-
-                player.setAllowFlight(true);
-                player.setFlying(true);
-
-                for (String message : MessagesConfig.instance.minecraft.join) {
-                    player.sendMessage(
-                            colorize(
-                                    message.replace("{prefix}", MessagesConfig.instance.minecraft.prefix)
-                            )
-                    );
+                processBlockedPlayer(player);
+                sendVerifyMessage(discordId, player);
+                if (mainConfig.bossbar.enabled) {
+                    createBossBar(player);
                 }
-
-                Button allowButton = Button.primary(
-                        "2fa-allow-join-" + player.getName(),
-                           MessagesConfig.instance.discord.verifyMessage.buttons.allow.content
-                        )
-                        .withEmoji(Emoji.fromUnicode(MessagesConfig.instance.discord.verifyMessage.buttons.allow.emoji));
-
-                jda.openPrivateChannelById(discordId).queue(channel -> {
-                    channel.sendMessage(MessagesConfig.instance.discord.verifyMessage.content)
-                            .setComponents(
-                                    ActionRow.of(
-                                            allowButton
-                                    )
-                            )
-                            .queue();
-                });
-
-                int time = MainConfig.instance.time;
-
-                if (MainConfig.instance.bossbar.enabled) {
-                    String barTitle = MainConfig.instance.bossbar.title
-                            .replace("{time}", String.valueOf(time))
-                            .replace("{prefix}", MessagesConfig.instance.minecraft.prefix);
-                    BarColor barColor = BarColor.valueOf(MainConfig.instance.bossbar.color);
-                    BarStyle barStyle = BarStyle.valueOf(MainConfig.instance.bossbar.style);
-
-                    BossBar bossBar = Bukkit.createBossBar(
-                            barTitle,
-                            barColor,
-                            barStyle
-                    );
-                    bossBar.addPlayer(player);
-
-                    BukkitRunnable bossBarTask = new BukkitRunnable() {
-                        int remainingTime = time;
-
-                        @Override
-                        public void run() {
-                            if(remainingTime <= 0 || !player.isOnline() || !BlockedList.instance.contains(player)) {
-                                bossBar.removePlayer(player);
-                                cancel();
-                                return;
-                            }
-
-                            remainingTime--;
-
-                            double progress = (double) remainingTime / time;
-                            bossBar.setProgress(progress);
-
-                            String barTitle = colorize(
-                                    MainConfig.instance.bossbar.title
-                                            .replace("{time}", String.valueOf(remainingTime))
-                                            .replace("{prefix}", MessagesConfig.instance.minecraft.prefix)
-                            );
-                            bossBar.setTitle(barTitle);
-                        }
-                    };
-                    bossBarTask.runTaskTimer(plugin, 0L, 20L);
-
-                    BukkitRunnable kickTask = new BukkitRunnable() {
-
-                        @Override
-                        public void run() {
-                            if (!player.isOnline()) {
-                                return;
-                            }
-
-                            if (BlockedList.instance.contains(player)) {
-                                String command = MainConfig.instance.timeoutCommand
-                                        .replace("{player}", player.getName());
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-                            }
-                        }
-                    };
-                    kickTask.runTaskLater(plugin, time * 20L);
-                }
+                scheduleKickTask(player, mainConfig.time);
             }
         });
     }
 
-    public static JDA getJDA() {
-        return jda;
+    private void processBlockedPlayer(Player player) {
+        blockedList.add(player);
+
+        player.setAllowFlight(true);
+        player.setFlying(true);
+    }
+
+    public void sendVerifyMessage(String discordId, Player player) {
+        Button allowButton = Button.primary(
+                        "2fa-allow-join-" + player.getName(),
+                        messagesConfig.discord.verifyMessage.buttons.allow.content
+                )
+                .withEmoji(Emoji.fromUnicode(messagesConfig.discord.verifyMessage.buttons.allow.emoji));
+
+        jda.openPrivateChannelById(discordId).queue(channel -> {
+            channel.sendMessage(messagesConfig.discord.verifyMessage.content)
+                    .setComponents(
+                            ActionRow.of(
+                                    allowButton
+                            )
+                    )
+                    .queue();
+        });
+    }
+
+    private void createBossBar(Player player) {
+        String barTitle = mainConfig.bossbar.title
+                .replace("{time}", String.valueOf(mainConfig.time))
+                .replace("{prefix}",messagesConfig.minecraft.prefix);
+        BarColor barColor = BarColor.valueOf(mainConfig.bossbar.color);
+        BarStyle barStyle = BarStyle.valueOf(mainConfig.bossbar.style);
+
+        BossBar bossBar = Bukkit.createBossBar(
+                barTitle,
+                barColor,
+                barStyle
+        );
+
+        bossBar.addPlayer(player);
+
+        startBossBarTimer(player, bossBar, mainConfig.time);
+    }
+
+    private void startBossBarTimer(Player player, BossBar bossBar, int time) {
+        new BukkitRunnable() {
+            int remainingTime = time;
+
+            @Override
+            public void run() {
+                if (remainingTime <= 0 || !player.isOnline() || !blockedList.contains(player)) {
+                    bossBar.removePlayer(player);
+                    cancel();
+                    return;
+                }
+
+                remainingTime--;
+
+                double progress = (double) remainingTime / time;
+                bossBar.setProgress(progress);
+
+                String barTitle = colorize(
+                        mainConfig.bossbar.title
+                                .replace("{time}", String.valueOf(remainingTime))
+                                .replace("{prefix}", messagesConfig.minecraft.prefix)
+                );
+                bossBar.setTitle(barTitle);
+            }
+        }.runTaskTimer(plugin, 0L, 20L);
+    }
+
+    private void scheduleKickTask(Player player, int time) {
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                if (!player.isOnline()) {
+                    return;
+                }
+
+                if (blockedList.contains(player)) {
+                    String command = mainConfig.timeoutCommand
+                            .replace("{player}", player.getName());
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                }
+            }
+        }.runTaskLater(plugin, time * 20L);
+    }
+
+    private void setupCommands() {
+        jda.updateCommands()
+                .addCommands(
+                        Commands.slash(mainConfig.unlinkCommand, mainConfig.unlinkDescription)
+                                .addOption(OptionType.STRING, "player", "player", true),
+
+                        Commands.slash(mainConfig.accountsCommand, mainConfig.accountsDescription)
+                ).queue();
     }
 }

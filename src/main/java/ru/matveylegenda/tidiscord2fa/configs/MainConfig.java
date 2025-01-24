@@ -8,7 +8,6 @@ import net.elytrium.serializer.language.object.YamlSerializable;
 import java.util.List;
 
 public class MainConfig extends YamlSerializable {
-    public static MainConfig instance = new MainConfig();
 
     @Comment({
             @CommentValue(" Команда (на сервере) для привязки (после изменения требуется перезагрузить сервер)")

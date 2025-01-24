@@ -5,12 +5,20 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import ru.matveylegenda.tidiscord2fa.TiDiscord2FA;
 import ru.matveylegenda.tidiscord2fa.configs.MessagesConfig;
 import ru.matveylegenda.tidiscord2fa.utils.BlockedList;
 
 import static ru.matveylegenda.tidiscord2fa.utils.ColorParser.colorize;
 
 public class AllowJoinListener extends ListenerAdapter {
+    private final MessagesConfig messagesConfig;
+    private final BlockedList blockedList;
+
+    public AllowJoinListener(TiDiscord2FA plugin) {
+        this.messagesConfig = plugin.messagesConfig;
+        this.blockedList = plugin.blockedList;
+    }
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
@@ -28,22 +36,22 @@ public class AllowJoinListener extends ListenerAdapter {
             Player player = Bukkit.getPlayerExact(playerName);
 
             if (player == null) {
-                event.editMessage(MessagesConfig.instance.discord.playerNotFound)
+                event.editMessage(messagesConfig.discord.playerNotFound)
                         .setComponents()
                         .queue();
 
                 return;
             }
 
-            if (!BlockedList.instance.contains(player)) {
-                event.editMessage(MessagesConfig.instance.discord.verifyNotRequired)
+            if (!blockedList.contains(player)) {
+                event.editMessage(messagesConfig.discord.verifyNotRequired)
                         .setComponents()
                         .queue();
 
                 return;
             }
 
-            BlockedList.instance.remove(player);
+            blockedList.remove(player);
 
             GameMode gameMode = player.getGameMode();
             if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
@@ -51,15 +59,15 @@ public class AllowJoinListener extends ListenerAdapter {
                 player.setAllowFlight(false);
             }
 
-            for (String message : MessagesConfig.instance.minecraft.allowJoin) {
+            for (String message : messagesConfig.minecraft.allowJoin) {
                 player.sendMessage(
                         colorize(
-                                message.replace("{prefix}", MessagesConfig.instance.minecraft.prefix)
+                                message.replace("{prefix}", messagesConfig.minecraft.prefix)
                         )
                 );
             }
 
-            event.editMessage(MessagesConfig.instance.discord.allowJoin)
+            event.editMessage(messagesConfig.discord.allowJoin)
                     .setComponents()
                     .queue();
         }

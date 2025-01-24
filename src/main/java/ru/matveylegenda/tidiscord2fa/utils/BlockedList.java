@@ -6,9 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BlockedList {
-    private Set<String> list = new HashSet<>();
-
-    public static BlockedList instance = new BlockedList();
+    private final Set<String> list = new HashSet<>();
 
     public boolean contains(Player player) {
         if (list.isEmpty()) {

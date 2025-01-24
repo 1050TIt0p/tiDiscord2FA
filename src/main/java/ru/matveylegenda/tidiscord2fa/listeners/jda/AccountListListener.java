@@ -11,10 +11,19 @@ import ru.matveylegenda.tidiscord2fa.database.Database;
 import java.util.List;
 
 public class AccountListListener extends ListenerAdapter {
+    private final MainConfig mainConfig;
+    private final MessagesConfig messagesConfig;
+    private final Database database;
+
+    public AccountListListener(TiDiscord2FA plugin) {
+        this.mainConfig = plugin.mainConfig;
+        this.messagesConfig = plugin.messagesConfig;
+        this.database = plugin.database;
+    }
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event){
-        if (!event.getName().equals(MainConfig.instance.accountsCommand)) {
+        if (!event.getName().equals(mainConfig.accountsCommand)) {
             return;
         }
 
@@ -24,15 +33,14 @@ public class AccountListListener extends ListenerAdapter {
 
         User user = event.getUser();
 
-        Database database = TiDiscord2FA.getDatabase();
         List<String> accountList = database.getAccountsByDiscordId(user.getId());
 
         if (accountList.isEmpty()) {
-            event.reply(MessagesConfig.instance.discord.noLinkedAccounts)
+            event.reply(messagesConfig.discord.noLinkedAccounts)
                     .queue();
         }
 
-        event.reply(MessagesConfig.instance.discord.accountList.replace("{accounts}", String.join(", ", accountList)))
+        event.reply(messagesConfig.discord.accountList.replace("{accounts}", String.join(", ", accountList)))
                 .queue();
     }
 }

@@ -6,14 +6,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.PluginManager;
-import ru.matveylegenda.tidiscord2fa.TiDiscord2FA;
 import ru.matveylegenda.tidiscord2fa.socials.Discord;
 
 public class JoinListener implements Listener {
-    private TiDiscord2FA plugin;
+    private final Discord discord;
 
-    public JoinListener(TiDiscord2FA plugin) {
-        this.plugin = plugin;
+    public JoinListener(Discord discord) {
+        this.discord = discord;
     }
 
     @EventHandler
@@ -28,6 +27,6 @@ public class JoinListener implements Listener {
 
         Player player = event.getPlayer();
 
-        new Discord(plugin).checkPlayer(player);
+        discord.checkPlayer(player);
     }
 }
