@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.internal.utils.JDALogger;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -72,6 +74,9 @@ public class Discord {
                 sendVerifyMessage(discordId, player);
                 if (mainConfig.bossbar.enabled) {
                     createBossBar(player);
+                }
+                if (mainConfig.actionbar.enabled) {
+                    startActionBarTimer(player);
                 }
                 scheduleKickTask(player, mainConfig.time);
             }
@@ -144,6 +149,36 @@ public class Discord {
                                 .replace("{prefix}", messagesConfig.minecraft.prefix)
                 );
                 bossBar.setTitle(barTitle);
+            }
+        }.runTaskTimer(plugin, 0L, 20L);
+    }
+
+    private void startActionBarTimer(Player player) {
+        new BukkitRunnable() {
+            int time = mainConfig.time;
+
+            @Override
+            public void run() {
+                if (time <= 0 || !player.isOnline() || !blockedList.contains(player)) {
+                    player.spigot().sendMessage(
+                            ChatMessageType.ACTION_BAR,
+                            TextComponent.fromLegacyText("")
+                    );
+                    cancel();
+                    return;
+                }
+
+                time--;
+
+                String actionBarMessage = colorize(
+                        mainConfig.actionbar.actionbarMessage
+                                .replace("{time}", String.valueOf(time))
+                                .replace("{prefix}", messagesConfig.minecraft.prefix)
+                );
+                player.spigot().sendMessage(
+                        ChatMessageType.ACTION_BAR,
+                        TextComponent.fromLegacyText(actionBarMessage)
+                );
             }
         }.runTaskTimer(plugin, 0L, 20L);
     }

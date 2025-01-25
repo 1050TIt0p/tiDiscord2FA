@@ -146,4 +146,143 @@ public class MessagesConfig extends YamlSerializable {
                 ""
         );
     }
+
+
+//    public Discord discord = new Discord();
+//
+//    public static class Discord {
+//        public VerifyMessage verifyMessage = new VerifyMessage();
+//
+//        public static class VerifyMessage {
+//            public String content = "Please confirm your login on the server";
+//
+//            public Buttons buttons = new Buttons();
+//
+//            public static class Buttons {
+//                public Allow allow = new Allow();
+//
+//                public static class Allow {
+//                    public String emoji = "✅";
+//                    public String content = "Confirm";
+//                }
+//            }
+//        }
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when login is confirmed")
+//        })
+//        public String allowJoin = "Login confirmed";
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent if the player already confirmed the login")
+//        })
+//        public String verifyNotRequired = "Confirmation not required";
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent if the player is not found")
+//        })
+//        public String playerNotFound = "Account not found";
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when linking an account")
+//        })
+//        public String accountLinked = "Discord successfully linked to account {player}";
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when unlinking an account")
+//        })
+//        public String accountUnlinked = "Discord successfully unlinked from account {player}";
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when trying to link an account and reach the limit")
+//        })
+//        public String maxLinkAccounts = "You have reached the limit for linked accounts";
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when viewing accounts if there are no linked accounts")
+//        })
+//        public String noLinkedAccounts = "You have no linked accounts";
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when viewing linked accounts")
+//        })
+//        public String accountList = "Linked accounts:\n```{accounts}\n```";
+//    }
+//
+//    public Minecraft minecraft = new Minecraft();
+//
+//    @NewLine
+//    public static class Minecraft {
+//        @Comment({
+//                @CommentValue(" {prefix} - Prefix before messages")
+//        })
+//        public String prefix = "&#8833ECD&#8544EAi&#8254E9s&#7F65E7c&#7C75E6o&#7A86E4r&#7796E3d&#74A7E12&#71B7E0F&#6EC8DEA &8»";
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when joining the server")
+//        })
+//        public List<String> join = List.of(
+//                "",
+//                " {prefix} &fPlease confirm your login via &#8833ECDiscord",
+//                ""
+//        );
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when login is confirmed")
+//        })
+//        public List<String> allowJoin = List.of(
+//                "",
+//                " {prefix} &fLogin successfully completed!",
+//                ""
+//        );
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when command is entered without arguments")
+//        })
+//        public List<String> usage = List.of(
+//                "",
+//                "Commands:",
+//                "/2fa link - link an account",
+//                ""
+//        );
+//
+//        @Comment({
+//                @CommentValue(" Message sent when reloading the config")
+//        })
+//        public List<String> reload = List.of(
+//                "",
+//                "{prefix} &fConfig reloaded!",
+//                ""
+//        );
+//
+//        @NewLine
+//        @Comment({
+//                @CommentValue(" Message sent when linking Discord")
+//        })
+//        public List<String> link = List.of(
+//                "",
+//                "{prefix} &fCode - {code}. Send it to the bot example#1111",
+//                ""
+//        );
+//
+//        @Comment({
+//                @CommentValue(" Message sent when trying to link an already linked account")
+//        })
+//        public List<String> alreadyLinked = List.of(
+//                "",
+//                "{prefix} &fAccount is already linked",
+//                ""
+//        );
+//    }
 }
