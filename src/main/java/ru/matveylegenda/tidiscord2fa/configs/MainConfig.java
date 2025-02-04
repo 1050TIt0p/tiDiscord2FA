@@ -152,7 +152,7 @@ public class MainConfig extends YamlSerializable {
         @Comment({
                 @CommentValue(" Текст сообщения в actionbar")
         })
-        public String actionbarMessage = "{prefix} Осталось &#8833EC{time} &fсекунд";
+        public String actionbarMessage = "{prefix} &fОсталось &#8833EC{time} &fсекунд";
     }
 
     @NewLine
@@ -305,7 +305,7 @@ public class MainConfig extends YamlSerializable {
 //        @Comment({
 //                @CommentValue(" Text of the message in the actionbar")
 //        })
-//        public String actionbarMessage = "{prefix} Remaining &#8833EC{time} &fseconds";
+//        public String actionbarMessage = "{prefix} &fRemaining &#8833EC{time} &fseconds";
 //    }
 //
 //
