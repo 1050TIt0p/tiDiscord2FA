@@ -26,6 +26,7 @@ import ru.matveylegenda.tidiscord2fa.listeners.jda.AllowJoinListener;
 import ru.matveylegenda.tidiscord2fa.listeners.jda.CodeListener;
 import ru.matveylegenda.tidiscord2fa.listeners.jda.UnlinkListener;
 import ru.matveylegenda.tidiscord2fa.utils.BlockedList;
+import ru.matveylegenda.tidiscord2fa.utils.SessionMap;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -36,6 +37,7 @@ public class Discord {
     private final MainConfig mainConfig;
     private final MessagesConfig messagesConfig;
     private final BlockedList blockedList;
+    private final SessionMap sessionMap;
     private final Database database;
     private JDA jda;
 
@@ -44,6 +46,7 @@ public class Discord {
         this.mainConfig = plugin.mainConfig;
         this.messagesConfig = plugin.messagesConfig;
         this.blockedList = plugin.blockedList;
+        this.sessionMap = plugin.sessionMap;
         this.database = plugin.database;
     }
 
@@ -66,6 +69,10 @@ public class Discord {
     }
 
     public void checkPlayer(Player player) {
+        if (isSessionActive(player)) {
+            return;
+        }
+
         CompletableFuture.runAsync(() -> {
             String discordId = database.getDiscordIdByPlayerName(player.getName());
 
@@ -81,6 +88,21 @@ public class Discord {
                 scheduleKickTask(player, mainConfig.time);
             }
         });
+    }
+
+    private boolean isSessionActive(Player player) {
+        if (sessionMap.contains(player)) {
+            String sessionIp = sessionMap.getIp(player);
+            String playerIp = player.getAddress().getAddress().getHostAddress();
+
+            long sessionLastJoinTime = sessionMap.getLastJoinTime(player);
+            long currentTime = System.currentTimeMillis();
+            long sessionTime = mainConfig.sessionTime * 60000;
+
+            return sessionIp.equals(playerIp) && currentTime - sessionLastJoinTime < sessionTime;
+        }
+
+        return false;
     }
 
     private void processBlockedPlayer(Player player) {

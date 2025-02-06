@@ -90,6 +90,12 @@ public class MainConfig extends YamlSerializable {
 
     @NewLine
     @Comment({
+            @CommentValue(" Время в минутах сколько будет действовать сессия")
+    })
+    public int sessionTime = 90;
+
+    @NewLine
+    @Comment({
             @CommentValue(" Разрешенные команды во время подтверждения")
     })
     public List<String> allowedCommands = List.of(
@@ -240,6 +246,12 @@ public class MainConfig extends YamlSerializable {
 //            @CommentValue(" Time in seconds after which the player will be kicked if they do not confirm login")
 //    })
 //    public int time = 30;
+//
+//    @NewLine
+//    @Comment({
+//            @CommentValue(" The time in minutes that the session will be active")
+//    })
+//    public int sessionTime = 90;
 //
 //    @NewLine
 //    @Comment({

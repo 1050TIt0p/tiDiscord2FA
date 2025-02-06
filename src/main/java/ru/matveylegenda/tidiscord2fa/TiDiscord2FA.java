@@ -12,6 +12,7 @@ import ru.matveylegenda.tidiscord2fa.database.impl.MySQLDatabase;
 import ru.matveylegenda.tidiscord2fa.database.impl.SQLiteDatabase;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.JoinListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.MainListener;
+import ru.matveylegenda.tidiscord2fa.listeners.bukkit.QuitListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.AuthMeLoginListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.NLoginLoginListener;
 import ru.matveylegenda.tidiscord2fa.listeners.bukkit.auth.OpeNLoginLoginListener;
@@ -19,6 +20,7 @@ import ru.matveylegenda.tidiscord2fa.socials.Discord;
 import ru.matveylegenda.tidiscord2fa.tasks.MessageTask;
 import ru.matveylegenda.tidiscord2fa.utils.BlockedList;
 import ru.matveylegenda.tidiscord2fa.utils.CodeMap;
+import ru.matveylegenda.tidiscord2fa.utils.SessionMap;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -35,6 +37,7 @@ public final class TiDiscord2FA extends JavaPlugin {
 
     public BlockedList blockedList = new BlockedList();
     public CodeMap codeMap = new CodeMap();
+    public SessionMap sessionMap = new SessionMap();
 
     @Override
     public void onEnable() {
@@ -98,6 +101,7 @@ public final class TiDiscord2FA extends JavaPlugin {
     private void registerListeners() {
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new JoinListener(discord), this);
+        pluginManager.registerEvents(new QuitListener(this), this);
         pluginManager.registerEvents(new MainListener(this), this);
 
         if (pluginManager.getPlugin("AuthMe") != null) {
