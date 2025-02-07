@@ -1,4 +1,4 @@
-# tiDiscord2FA
+# tiDiscord2FA [![CodeFactor](https://www.codefactor.io/repository/github/1050tit0p/tidiscord2fa/badge)](https://www.codefactor.io/repository/github/1050tit0p/tidiscord2fa)
 Плагин на двухфакторную аутентификацию через Discord для защиты аккаунтов игроков вашего сервера
 
 ---
